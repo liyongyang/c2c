@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.c2c.dao.ProductDao">
+
+    <resultMap id="productDetail" type="com.c2c.dto.ProductDetailDTO">
+        <id property="id" column="id"/>
+        <result property="name" column="name"/>
+        <result property="description" column="description"/>
+        <result property="price" column="price"/>
+        <result property="type" column="type"/>
+        <result property="count" column="count"/>
+        <result property="display" column="display"/>
+        <result property="transaction" column="transaction"/>
+        <result property="sales" column="sales"/>
+        <result property="image" column="image"/>
+        <result property="time" column="time"/>
+        <collection property="productReplyList" column="id" select="com.c2c.dao.ProductReplyDao.findProductReply" fetchType="eager"/>
+    </resultMap>
+
+    <!--  查询所有商品  -->
+    <select id="findAllProduct" parameterType="int" resultType="com.c2c.dto.ProductDTO">
+        SELECT id,name,price,image,display,type FROM product
+    </select>
+
+    <!--  查询商品详情  -->
+    <select id="findProductDetail" parameterType="long" resultMap="productDetail">
+        SELECT p.id,p.name,p.level,p.price,p.description,p.count,p.transaction,
+            p.sales,p.image,p.display,p.type,u.real_name AS seller,u.phone,p.time
+            FROM product p JOIN user u ON p.user_id = u.id WHERE p.id = #{id}
+    </select>
+
+    <!--  搜索商品  -->
+    <select id="searchProduct" parameterType="string" resultType="com.c2c.dto.ProductDTO">
+        SELECT id,name,price,image,display,type FROM product
+            WHERE type = #{type}
+    </select>
+
+    <!--  通过ID查询商品  -->
+    <select id="findProductById" parameterType="long" resultType="product">
+        SELECT * FROM product WHERE id = #{productId}
+    </select>
+
+    <!--  新增商品  -->
+    <insert id="addProduct" parameterType="product">
+        INSERT INTO product(user_id,type,name,price,image,description,display,time)
+         VALUES(#{userId},#{type},#{name},#{price},#{image},#{description},#{display},#{time})
+    </insert>
+
+    <!--  我发布的商品  -->
+    <select id="myProduct" parameterType="long" resultType="com.c2c.dto.ProductDTO">
+        SELECT id,name,price,image,display,type FROM product WHERE user_id = #{userId}
+    </select>
+
+    <!--  移除发布的商品  -->
+    <delete id="removeProduct">
+        DELETE FROM product WHERE id = #{id} and user_id = #{userId}
+    </delete>
+</mapper>

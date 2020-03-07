@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration PUBLIC
+        "-//mybatis.org//DTD Config 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+    <settings>
+        <!--配置懒加载-->
+        <setting name="lazyLoadingEnabled" value="true"/>
+        <!--配置驼峰-->
+        <setting name="mapUnderscoreToCamelCase" value="true"/>
+    </settings>
+    <!--设置别名-->
+    <typeAliases>
+        <typeAlias type="com.c2c.entity.User" alias="user"/>
+        <typeAlias type="com.c2c.entity.Product" alias="product"/>
+        <typeAlias type="com.c2c.entity.ProductReply" alias="productReply"/>
+        <typeAlias type="com.c2c.entity.Collect" alias="collect"/>
+        <typeAlias type="com.c2c.entity.Cart" alias="cart"/>
+    </typeAliases>
+    <!-- 配置分页插件 -->
+    <plugins>
+        <plugin interceptor="com.github.pagehelper.PageInterceptor"/>
+    </plugins>
+    <!--设置映射文件-->
+    <mappers>
+        <mapper resource="mapper/UserMapper.xml"/>
+        <mapper resource="mapper/ProductMapper.xml"/>
+        <mapper resource="mapper/ProductReplyMapper.xml"/>
+        <mapper resource="mapper/CollectMapper.xml"/>
+        <mapper resource="mapper/CartMapper.xml"/>
+    </mappers>
+</configuration>

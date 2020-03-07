@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.c2c.dao.CollectDao">
+    <resultMap id="collectMap" type="com.c2c.dto.CollectDTO">
+        <id property="id" column="id"/>
+        <collection property="product" column="product_id" select="com.c2c.dao.ProductDao.findProductById" fetchType="eager"/>
+    </resultMap>
+    <!--  添加收藏  -->
+    <insert id="addCollect" parameterType="collect">
+        INSERT INTO collect(product_id,user_id) VALUES(#{productId},#{userId})
+    </insert>
+    <!--  我的收藏  -->
+    <select id="myCollect" parameterType="long" resultMap="collectMap">
+        SELECT id,product_id FROM collect WHERE user_id = #{userId}
+    </select>
+    <!--  取消收藏  -->
+    <delete id="removeCollect" parameterType="long">
+        DELETE FROM collect WHERE product_id = #{productId} and user_id = #{userId}
+    </delete>
+</mapper>

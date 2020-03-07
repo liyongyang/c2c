@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.c2c.dao.UserDao">
+    <!-- 查询用户名是否存在 -->
+    <select id="findUserExist" parameterType="string" resultType="int">
+        SELECT COUNT(1) FROM user WHERE username = #{username}
+    </select>
+
+    <!--通过用户名、密码-->
+    <select id="findUserByUsernameAndPassword" resultType="user">
+        SELECT id,username,nickname,real_name,phone,clazz,sno,dormitory,gender,avatar
+         FROM user WHERE username = #{username} AND password = #{password}
+    </select>
+
+    <!--  新增用户  -->
+    <insert id="insertUser" parameterType="user" useGeneratedKeys="true">
+        INSERT INTO user(username,password,phone,createTime)
+         VALUES(#{username},#{password},#{phone},#{createTime})
+    </insert>
+
+    <update id="updatePasswordByUserId">
+        UPDATE user SET password = #{password} WHERE id = #{id}
+    </update>
+
+    <delete id="deleteUserById" parameterType="long">
+        DELETE FROM user WHERE id = #{id}
+    </delete>
+    <!--  查询用户基本信息  -->
+    <select id="findUserInfo" parameterType="long" resultType="com.c2c.dto.UserInfoOutDTO">
+        SELECT id,nickname,real_name,clazz,sno,phone,password FROM user WHERE id = #{id}
+    </select>
+    <!--  修改用户基本信息  -->
+    <update id="updateUserInfo" parameterType="com.c2c.dto.UserInfoInDTO">
+        UPDATE user SET nickname = #{nickname},phone = #{phone},password = #{newPwd} WHERE id = #{id}
+    </update>
+    <!--  查询用户密码  -->
+    <select id="findPasswordById" parameterType="long" resultType="string">
+        SELECT password FROM user WHERE id = #{id}
+    </select>
+</mapper>
